@@ -1,0 +1,126 @@
+<template>
+    <lightning-card  title="Post Office LWC" icon-name="custom:custom68">
+
+        <div class="slds-align_absolute-center">
+            <lightning-button variant="brand" label="Fetch Indial Postal Data" onclick={handleClick}></lightning-button>
+        </div>
+
+        <template if:true={showModal}>
+
+            <section 
+                role="dialog" 
+                tabindex="-1" 
+                aria-modal="true" 
+                aria-labelledby="modal-heading-01" 
+                class="slds-modal slds-fade-in-open slds-modal_small"
+            >
+                <div class="slds-modal__container">
+
+                    <button class="slds-button slds-button_icon slds-modal__close" onclick={handleClose}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Cancel and close</span>
+                    </button>
+
+                    <div class="slds-modal__header">
+                        <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">
+                            Indian PostOffice Data
+                        </h1>
+                        <div class="slds-border_bottom slds-m-vertical_medium"></div>
+                        <lightning-progress-indicator
+                            class="slds-m-top_medium"
+                            current-step={currentStep}
+                            type="path"
+                            variant="base">
+                            <lightning-progress-step label="Choice Select" value="1"></lightning-progress-step>
+                            <lightning-progress-step label="Enter Data" value="2"></lightning-progress-step>
+                            <lightning-progress-step label="Result Section" value="3"></lightning-progress-step>
+                        </lightning-progress-indicator>
+                    </div>
+
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <div class="slds-p-around_medium">
+                            <template if:true={Step1}>
+                                <div class="slds-p-around_medium slds-align_absolute-center">
+                                    <lightning-radio-group
+                                        name="radioGroup"
+                                        label="Select Any One To Get Data"
+                                        options={options}
+                                        value={value}
+                                        type="radio"
+                                        onchange={handleChange}
+                                    ></lightning-radio-group>
+                                </div>
+                            </template>
+                            <template if:true={Step2}>
+                                <div class="slds-p-around_medium">
+                                    <template if:true={isPin}>
+                                        <lightning-input type="text" variant="standard" label="Please Enter PIN code to search post office details" placeholder="Enter pincode type here..." lwc:ref="post"></lightning-input>
+                                    </template>
+                                    <template if:true={isBranch}>
+                                         <lightning-input type="text" variant="standard" label="Please Enter post office branch name to search post office details" lwc:ref="bran"></lightning-input>
+                                    </template>
+                                </div>
+                            </template>
+                            
+                            <template if:true={Step3}>
+                                <template if:true={showData}>
+                                    <div class="slideshow-container">
+                                        <template for:each={postalDetails} for:item="obj">
+                                            <template if:true={obj.isActive}>
+                                                <div class="card active" key={obj.Id}  style="
+                                                    border: 1px solid #d8dde6; 
+                                                    border-radius: 8px; 
+                                                    padding: 16px; 
+                                                    box-shadow: 0 2px 6px rgba(0,0,0,0.1); 
+                                                    background-color: #ffffff;
+                                                    width: 300px;
+                                                ">
+                                                    <p><strong>Name : </strong> {obj.Name} A</p>
+                                                    <p><strong>PinCode : </strong> {obj.PINCode}</p>
+                                                    <p><strong>BranchType : </strong> {obj.BranchType}</p>
+                                                    <p><strong>Circle : </strong> {obj.Circle}</p>
+                                                    <p><strong>District : </strong> {obj.District}</p>
+                                                    <p><strong>Division : </strong> {obj.Division}</p>
+                                                    <p><strong>Region : </strong> {obj.Region}</p>
+                                                    <p><strong>State : </strong> {obj.State}</p>
+                                                    <p><strong>Country : </strong> {obj.Country}</p>
+                                                </div>
+                                            </template>
+                                        </template>
+                                        <!-- Navigation -->
+                                        <span class="prev" onclick={prevSlide}>&#10094;</span>
+                                        <span class="next" onclick={nextSlide}>&#10095;</span>
+                                    </div>
+                                </template>
+                            </template>
+                        </div>
+                    </div>
+
+                    <div class="slds-modal__footer">
+                        <template if:true={showPrevious}>
+                            <button class="slds-button slds-button_brand" onclick={handlePrevious}>
+                                Previous
+                            </button>
+                        </template>
+                        <template if:true={showNext}>
+                            <button class="slds-button slds-button_brand" onclick={handleNext}>
+                                Next
+                            </button>
+                        </template>
+                        <template if:true={showClose}>
+                            <button class="slds-button slds-button_brand" onclick={handleClose}>
+                                Close
+                            </button>
+                        </template>
+                    </div>
+
+                </div>
+            </section>
+
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+
+        </template>
+
+        <p slot="footer">@Indian Postal Code</p>
+    </lightning-card>
+</template>
